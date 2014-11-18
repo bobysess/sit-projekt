@@ -1,0 +1,31 @@
+<!--- liste Key s  with delete button --->
+<h3>Keys</h3>
+   <table id="keys" class="table table-bordered">
+       <tr>
+         <th>Keys</th>
+         <th>Remarks</th>
+         <th>Delete</th>
+       </tr>
+       <%= "Sie besitzen keinen Schlüssel" if @keys.empty?  %>
+        <%  @keys.each do |key|%>
+           <tr>
+
+             <td> <%= key.value %></td>
+             <td><%="#{aes_decrypt(get_super_key,key.remark) } "  if key.remark%></td>
+             <td>
+                <%= link_to "delete", key_path(key), :method=>:delete %>
+             </td>
+           </tr>
+        <% end %>
+   </table>
+<!--  button to add -->
+<!--button id="new_key">New Key</button> -->
+<%= form_tag new_key_path do%>
+    <fieldset>
+      <legend>New Key</legend>
+        <%=label_tag :remark  %>
+        <%= text_field_tag :remark %>
+        <%= submit_tag "new Key",:class=>"btn btn-primary" %>
+    </fieldset>
+<% end %>
+

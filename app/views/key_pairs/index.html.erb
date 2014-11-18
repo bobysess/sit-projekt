@@ -1,0 +1,29 @@
+<h3>Keys</h3>
+<table id="keys" class="table table-bordered">
+  <tr>
+    <th>Remark</th>
+    <th>Private Key</th>
+    <th>Public Key</th>
+    <th>Delete</th>
+  </tr>
+  <%  @key_pairs.each do |key_pair|%>
+      <%= "Sie besitzen keinen Schlüssel" if @key_pairs.empty?  %>
+      <tr>
+        <td> <%= aes_decrypt(get_super_key,key_pair.remark) %></td>
+        <td><%= link_to "private key", "/privatekey/#{key_pair.id}"%></td>
+        <td><%= link_to "public key", "/publickey/#{key_pair.id}"%></td>
+        <td><%= link_to "delete", key_pair_path(key_pair), :method=>:delete %></td>
+      </tr>
+  <% end %>
+</table>
+<!--  button to add -->
+<!--button id="new_key">New Key</button> -->
+<%= form_tag key_pairs_path do%>
+    <fieldset>
+      <legend>New Key</legend>
+      <%=label_tag :remark  %>
+      <%= text_field_tag :remark %>
+      <%= submit_tag "new Key Pair",:class=>"btn btn-primary" %>
+    </fieldset>
+<% end %>
+

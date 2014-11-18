@@ -1,0 +1,1 @@
+Rails.application.config.assets.precompile += ['jquery.ui.widget.js', 'jquery.iframe-transport.js', 'jquery.fileupload.js']

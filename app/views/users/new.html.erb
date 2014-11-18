@@ -1,0 +1,68 @@
+
+
+
+
+<!----- -------->
+<%=form_for  @user ,  :url=>"/registration"   do |form| %>
+<table  >
+  </tr>
+  <tr>
+    <td colspan="2"><h3>Registration</h3></td>
+  </tr>
+<tr>
+ <td><%=form.label  :name %></td>
+  <td><%=form.text_field :name %></td>
+</tr>
+
+<tr>
+  <td><%=form.label  :email %></td>
+  <td><%=form.email_field :email %></td>
+</tr>
+
+<tr>
+  <td> <%=form.label  :password %></td>
+  <td><%=form.password_field :password %></td>
+</tr>
+
+<tr>
+  <td><%=form.label  :confirm_password %></td>
+  <td><%=form.password_field :confirm_password %></td>
+</tr>
+<tr>
+  <td colspan="2"><%= form.submit "Sign up" ,:class=>"btn btn-primary" %></td>
+</tr>
+  <tr>
+  <td colspan="2"><%=link_to "login","login"  %></td>
+</tr>
+</table>
+<% end %>
+
+<style>
+    .btn{
+        width:100%;
+    }
+
+    input,h3,label,.btn,td li{
+        margin: 10px;
+    }
+    form{
+        margin:auto;
+        width: 40%;
+        padding-top:50px;
+        padding-bottom:50px;
+        border:solid 1px;
+        border-radius: 10px;
+    }
+    h3{
+        margin:auto
+    }
+    table{
+        margin:auto;
+    }
+    input{
+        border-radius: 5px;
+        width:100%;
+    }
+</style>
+
+

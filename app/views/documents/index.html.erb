@@ -1,0 +1,78 @@
+<!--  list all files  with  encrypted und decryptet  -->
+<h3>Documents</h3>
+<table id="documents" class="table  table-bordered ">
+  <%= "Sie besitzen keinen Dokument ausgeliehen" if @documents.empty?  %>
+  <tr>
+    <th>Keys</th>
+    <th>Encrypted Files</th>
+    <th>Decrypted Files</th>
+    <th> Delete</th>
+  </tr>
+  <%  @documents.each do |docu|%>
+
+      <tr>
+        <td  title="<%="#{aes_decrypt(get_super_key,docu.key.value)}(#{aes_decrypt(get_super_key,docu.key.remark)})"  %>">
+           <%= "#{aes_decrypt(get_super_key,docu.name)} "%><%="(#{aes_decrypt(get_super_key,docu.remark)})" if docu.remark %>
+        </td>
+        <td><%=link_to "encrypted", "/encrypted/#{docu.id}"  %></td>
+        <td><%=link_to "decrypted", "/decrypted/#{docu.id}"  %></td>
+        <td> <%= link_to "delete" ,document_path(docu),:method => :delete %></td>
+
+<% end %>
+</table>
+<!-- new  Files   upload  -->
+<%= form_for @document , :html=>{:class=>"form-horizontal"} do |form| %>
+   <fieldset>
+    <legend>New  File</legend>
+     <table>
+     <tr><td>Remark</td>  <td> <%= form.text_field :remark  %></td> </tr>
+     <tr> <td>Key</td><td>  <%= form.select :key_id, options_for_select(@user.keys.collect{|key|  ["#{aes_decrypt(get_super_key,key.value )} (#{aes_decrypt(get_super_key,key.remark)}) ", key.id] } ) %></td></tr>
+     <tr><td>File</td><td> <%=form.file_field :upload%></td></tr>
+     <tr><td> <%= form.submit "New File",:class=>"btn btn-primary"%></td></tr>
+    </table>
+    </fieldset>
+
+<% end  %>
+
+<!--   encode file  with key ---->
+
+<%= form_for @document, :url=>"decryptfile",:html=>{:class=>"form-horizontal",:role=>"form",:style=>"margin-top:50px;margin-bottom:50px"} do |form| %>
+   <fieldset>
+     <legend>Encrypt  File</legend>
+  <table>
+    <tr>
+    <td>Key</td>
+    <td>
+     <%= form.select :key_id, options_for_select(@keys.collect{|key|  ["#{aes_decrypt(key.user.get_super_key,key.value )} (#{aes_decrypt(key.user.get_super_key,key.remark)}) ", key.id] } ) %>
+    </td>
+    </tr>
+    <tr>
+    <td>File</td>
+    <td>
+      <%=form.file_field :upload  %>
+    </td>
+    </tr>
+    <tr>
+
+      <td><%= form.submit "Encrypt",:class=>"btn btn-primary" %></td>
+    </tr>
+  </table>
+
+   </fieldset>
+
+<% end  %>
+
+<style>
+  form input, form select {
+      margin-bottom:10px
+  }
+  input{
+      border-radius: 5px;
+  }
+</style>
+
+<script>
+    $(function() {
+        $( document ).tooltip();
+    });
+</script>

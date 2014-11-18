@@ -1,0 +1,55 @@
+
+<%=form_for  @user ,  :url=>"/login"  do |form| %>
+<table >
+  <tr>
+    <td colspan="2"><h3>Please sign in</h3></td>
+  </tr>
+  <tr>
+    <td><%=form.label  :email  %></td>
+    <td><%=form.email_field :email ,:class=> "form-signin",:placeholder=>"Enter Email" %></td>
+  </tr>
+  <tr>
+    <td> <%=form.label  :password %></td>
+    <td><%=form.password_field :password, :class=> "form-signin",:placeholder=>"Password"  %></td>
+  </tr>
+  <tr>
+    <td colspan="2"><%= form.submit "login", :class=>"btn btn-primary" %></td>
+  </tr>
+  <tr>
+    <td colspan="2"><%= link_to  "registration", "/registration" %> </td>
+  </tr>
+
+</table>
+<% end %>
+
+
+<style>
+   .btn{
+       width:100%;
+   }
+   td{
+       margin-top:10px;
+       border:0px
+   }
+   form{
+       margin:auto;
+       width: 30%;
+       padding-top:50px;
+       padding-bottom:50px;
+       border:solid 1px;
+       border-radius: 10px;
+   }
+   h3{
+       margin:auto
+   }
+   table{
+       margin:auto;
+   }
+   input{
+       border-radius: 5px;
+       width:100%;
+   }
+   input,h3,label,.btn,td li{
+       margin: 10px;
+   }
+</style>
