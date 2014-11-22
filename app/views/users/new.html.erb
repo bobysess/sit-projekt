@@ -28,6 +28,17 @@
   <td><%=form.label  :confirm_password %></td>
   <td><%=form.password_field :confirm_password %></td>
 </tr>
+
+<tr>
+    <td> <%=form.label  :super_key %></td>
+    <td><%=form.password_field :super_key %></td>
+</tr>
+
+<tr>
+    <td> <%=form.label  :super_key_confirm %></td>
+    <td><%=form.password_field :super_key_confirm %></td>
+</tr>
+
 <tr>
   <td colspan="2"><%= form.submit "Sign up" ,:class=>"btn btn-primary" %></td>
 </tr>

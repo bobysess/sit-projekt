@@ -1,5 +1,4 @@
 
-
 class  User <  ActiveRecord::Base
 
       #has_many :friends ,:through => :friendships
@@ -20,12 +19,15 @@ class  User <  ActiveRecord::Base
       validates :name , :presence =>true , :uniqueness => true
 
       def get_super_key
-         self.password
+         self.super_key
       end
+
 
       def  friends
           friendships=Friendship.all.select{|fr|  fr.user.id==self.id}
           friends=friendships.collect{|fr| fr.friend}
           friends
       end
+
+
 end

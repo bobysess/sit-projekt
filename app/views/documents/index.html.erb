@@ -9,10 +9,11 @@
     <th> Delete</th>
   </tr>
   <%  @documents.each do |docu|%>
-
+      <% key= rsa_decrypt(get_private_key,docu.key.value)  %>
+      <% remark=rsa_decrypt(get_private_key,docu.key.remark)%>
       <tr>
-        <td  title="<%="#{aes_decrypt(get_super_key,docu.key.value)}(#{aes_decrypt(get_super_key,docu.key.remark)})"  %>">
-           <%= "#{aes_decrypt(get_super_key,docu.name)} "%><%="(#{aes_decrypt(get_super_key,docu.remark)})" if docu.remark %>
+        <td  title="<%="#{key} (#{remark})"  %>">
+           <%= "#{aes_decrypt(key,docu.name)} "%><%="(#{aes_decrypt(key,docu.remark)})" if docu.remark %>
         </td>
         <td><%=link_to "encrypted", "/encrypted/#{docu.id}"  %></td>
         <td><%=link_to "decrypted", "/decrypted/#{docu.id}"  %></td>
@@ -26,7 +27,7 @@
     <legend>New  File</legend>
      <table>
      <tr><td>Remark</td>  <td> <%= form.text_field :remark  %></td> </tr>
-     <tr> <td>Key</td><td>  <%= form.select :key_id, options_for_select(@user.keys.collect{|key|  ["#{aes_decrypt(get_super_key,key.value )} (#{aes_decrypt(get_super_key,key.remark)}) ", key.id] } ) %></td></tr>
+     <tr> <td>Key</td><td>  <%= form.select :key_id, options_for_select(@user.keys.collect{|key|  ["#{rsa_decrypt(get_private_key,key.value )} (#{rsa_decrypt(get_private_key,key.remark)}) ", key.id] } ) %></td></tr>
      <tr><td>File</td><td> <%=form.file_field :upload%></td></tr>
      <tr><td> <%= form.submit "New File",:class=>"btn btn-primary"%></td></tr>
     </table>
@@ -36,25 +37,25 @@
 
 <!--   encode file  with key ---->
 
-<%= form_for @document, :url=>"decryptfile",:html=>{:class=>"form-horizontal",:role=>"form",:style=>"margin-top:50px;margin-bottom:50px"} do |form| %>
+<%= form_tag  :url=>"decryptfile",:html=>{:class=>"form-horizontal",:role=>"form",:style=>"margin-top:50px;margin-bottom:50px"} do |form| %>
    <fieldset>
      <legend>Encrypt  File</legend>
   <table>
     <tr>
     <td>Key</td>
     <td>
-     <%= form.select :key_id, options_for_select(@keys.collect{|key|  ["#{aes_decrypt(key.user.get_super_key,key.value )} (#{aes_decrypt(key.user.get_super_key,key.remark)}) ", key.id] } ) %>
+     <%= select_tag :loan_id, options_for_select(@loans.collect{|loan|  ["#{rsa_decrypt(get_private_key,loan.key_value )} (#{loan.user.name}-#{rsa_decrypt(get_private_key,loan.remark)}) ", loan.id] } ) %>
     </td>
     </tr>
     <tr>
     <td>File</td>
     <td>
-      <%=form.file_field :upload  %>
+      <%=file_field_tag :upload  %>
     </td>
     </tr>
     <tr>
 
-      <td><%= form.submit "Encrypt",:class=>"btn btn-primary" %></td>
+      <td><%= submit_tag "Encrypt",:class=>"btn btn-primary" %></td>
     </tr>
   </table>
 

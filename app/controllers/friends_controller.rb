@@ -20,7 +20,7 @@ class FriendsController < ApplicationController
 
   def   create
      @user=current_user
-     @friend= (User.all.select{|u| u.name==aes_encrypt(u.get_super_key, params[:friend_name])}).first if params[:friend_name] && params[:friend_name]!=""
+     @friend= (User.all.select{|u| u.name== params[:friend_name]}).first if params[:friend_name] && params[:friend_name]!=""
      @friend= User.find(params[:friend_id]) if params[:friend_id]
     @friendship=Friendship.new
     if !@user.friends.include?(@friend) && @friend

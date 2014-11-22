@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141118074318) do
+ActiveRecord::Schema.define(version: 20141121235747) do
+
+  create_table "distributed_documents", force: true do |t|
+    t.integer "user_id"
+    t.integer "friend_id"
+    t.integer "document_id"
+    t.text    "key"
+  end
 
   create_table "documents", force: true do |t|
     t.text    "name"
@@ -48,6 +55,8 @@ ActiveRecord::Schema.define(version: 20141118074318) do
     t.integer "key_id"
     t.integer "user_id"
     t.integer "friend_id"
+    t.text    "key_value"
+    t.text    "remark"
   end
 
   create_table "users", force: true do |t|
@@ -56,6 +65,9 @@ ActiveRecord::Schema.define(version: 20141118074318) do
     t.text    "name"
     t.text    "confirm_password"
     t.integer "user_id"
+    t.text    "key_public"
+    t.text    "key_private"
+    t.text    "super_key"
   end
 
   add_index "users", ["user_id"], name: "index_users_on_user_id"

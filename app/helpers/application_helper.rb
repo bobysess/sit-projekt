@@ -47,7 +47,7 @@ module ApplicationHelper
   end
 
   def  get_super_key
-     current_user.password
+    current_user.super_key
   end
 
   def  get_iv
@@ -68,5 +68,22 @@ module ApplicationHelper
     key_pair[:private_key]=rsa_key.to_pem
     key_pair[:public_key]=rsa_key.public_key.to_pem
     key_pair
+  end
+
+  def rsa_encrypt(key_public, data)
+    public_key = OpenSSL::PKey::RSA.new(key_public)
+    encrypted_data = Base64.encode64(public_key.public_encrypt(data))
+    encrypted_data
+  end
+
+  def rsa_decrypt(key_private, data)
+    private_key = OpenSSL::PKey::RSA.new(key_private)
+    decrypted_data = private_key.private_decrypt(Base64.decode64(data))
+    decrypted_data
+
+  end
+
+  def get_private_key
+     private_key =aes_decrypt(get_super_key,current_user.key_private)
   end
 end

@@ -4,14 +4,23 @@
   <tr>
     <td colspan="2"><h3>Please sign in</h3></td>
   </tr>
+
   <tr>
     <td><%=form.label  :email  %></td>
     <td><%=form.email_field :email ,:class=> "form-signin",:placeholder=>"Enter Email" %></td>
   </tr>
+
   <tr>
     <td> <%=form.label  :password %></td>
     <td><%=form.password_field :password, :class=> "form-signin",:placeholder=>"Password"  %></td>
   </tr>
+<!--
+  <tr>
+    <td> <%=form.label  :super_key %></td>
+    <td> <%=form.password_field :super_key, :class=> "form-signin",:placeholder=>"Super Key"  %></td>
+  </tr>
+  --->
+
   <tr>
     <td colspan="2"><%= form.submit "login", :class=>"btn btn-primary" %></td>
   </tr>

@@ -11,8 +11,8 @@
 
   <%  @loans_from_user.each do |loan|%>
       <tr>
-        <td><%= "#{aes_decrypt(get_super_key,loan.friend.name )} (#{aes_decrypt(get_super_key,loan.friend.email )})"%></td>
-        <td><%= "#{aes_decrypt(get_super_key,loan.key.value )} (#{aes_decrypt(get_super_key,loan.key.remark ) if loan.key.remark})"%></td>
+        <td><%= "#{loan.friend.name} (#{loan.friend.email })"%></td>
+        <td><%= "#{rsa_decrypt(get_private_key,loan.key.value )} (#{rsa_decrypt(get_private_key,loan.key.remark ) if loan.key.remark})"%></td>
         <td><%= link_to "delete" ,loan_path(loan),:method => :delete %></td>
       </tr>
   <% end %>
@@ -28,8 +28,9 @@
   <%= "Es wurde Ihnen  keinen Schlüssel ausgeliehen" if @loans_to_user.empty?  %>
   <%  @loans_to_user.each do |loan|%>
       <tr>
-        <td><%= "#{aes_decrypt(loan.user.get_super_key,loan.user.name )} (#{aes_decrypt(loan.user.get_super_key,loan.user.email )})"%></td>
-        <td><%= "#{aes_decrypt(loan.user.get_super_key,loan.key.value )} (#{aes_decrypt(loan.user.get_super_key,loan.key.remark ) if loan.key.remark})"%></td>
+        <td><%= "#{loan.user.name} (#{loan.user.email})"%></td>
+        <td><%="#{rsa_decrypt(get_private_key,loan.key_value )} (#{rsa_decrypt(get_private_key,loan.remark ) if loan.remark})"%></td>
+
       </tr>
   <% end %>
 </table>
@@ -42,13 +43,13 @@
       <tr>
         <td>Friend</td>
        <td>
-       <%= form.select :friend_id, options_for_select(@friends.collect{|friend|  ["#{aes_decrypt(friend.get_super_key,friend.name )} (#{aes_decrypt(friend.get_super_key,friend.email )}) ",friend.id ]} )%>
+       <%= form.select :friend_id, options_for_select(@friends.collect{|friend|  ["#{friend.name } (#{friend.email }) ",friend.id ]} )%>
        </td>
       </tr>
       <tr>
         <td>Key</td>
         <td>
-         <%= form.select :key_id, options_for_select(@keys.collect{|key|  ["#{aes_decrypt(get_super_key,key.value )} #{aes_decrypt(get_super_key,key.remark)} ", key.id] } ) %>
+         <%= form.select :key_id, options_for_select(@keys.collect{|key|  ["#{rsa_decrypt(get_private_key,key.value )} #{rsa_decrypt(get_private_key,key.remark)} ", key.id] } ) %>
         </td>
       </tr>
       <tr>

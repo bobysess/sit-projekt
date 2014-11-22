@@ -10,8 +10,8 @@
         <%  @keys.each do |key|%>
            <tr>
 
-             <td> <%= key.value %></td>
-             <td><%="#{aes_decrypt(get_super_key,key.remark) } "  if key.remark%></td>
+             <td> <%= "#{rsa_decrypt(get_private_key,key.value) }" %></td>
+             <td><%="#{rsa_decrypt(get_private_key,key.remark) } "  if key.remark%></td>
              <td>
                 <%= link_to "delete", key_path(key), :method=>:delete %>
              </td>

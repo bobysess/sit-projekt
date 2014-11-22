@@ -29,6 +29,7 @@ SitProjet::Application.routes.draw do
   resources :friends
   resources :loans
   resources :key_pairs
+  resources :distributed_documents
 
 
 

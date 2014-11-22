@@ -4,8 +4,8 @@
   <%= "Sie besitzen keinen Freund" if @friends.empty?  %>
   <%  @friends.each do |friend|%>
       <tr>
-        <td><%= aes_decrypt(friend.get_super_key,friend.name) %></td>
-        <td><%=aes_decrypt(friend.get_super_key,friend.email) %></td>
+        <td><%= friend.name %></td>
+        <td><%=friend.email %></td>
         <td><%= link_to "delete", "/friends/#{friend.id}"  ,:method=>:delete %>  </td>
       </tr>
   <% end %>
@@ -15,7 +15,7 @@
 <%= form_tag "friends/create",:class=>"form-horizontal" do %>
     <fieldset>
       <legend>New Friend</legend>
-         <%= select_tag :friend_id, options_for_select(@other_users.collect{|user|  ["#{aes_decrypt(user.get_super_key,user.name)} #{aes_decrypt(user.get_super_key,user.email)} ", user.id] } ) %>
+         <%= select_tag :friend_id, options_for_select(@other_users.collect{|user|  ["#{user.name} #{user.email} ", user.id] } ) %>
           <%= submit_tag "new Friend",:class=>"btn btn-primary" %>
     </fieldset>
 <% end %>

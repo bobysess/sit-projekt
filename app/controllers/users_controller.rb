@@ -11,16 +11,26 @@ class UsersController< ApplicationController
 
   def create
      password_hash=hash(params[:user][:password])
-     if(params[:user][:password]==params[:user][:confirm_password])
+     if(params[:user][:password]==params[:user][:confirm_password] && params[:user][:super_key]== params[:user][:super_key_confirm])
        # hash password und save
        #save the others  encoded
        @user=User.new
        @user.password=password_hash
        @user.confirm_password=password_hash
-       @user.email= aes_encrypt(password_hash,params[:user][:email])
-       @user.name=aes_encrypt(password_hash,params[:user][:name])
+       @user.email= params[:user][:email]
+       @user.name=params[:user][:name]
+
+       ## save super password
+       @user.super_key=hash(params[:user][:super_key])
+       ##generate key_pair
+       key_pair= generate_key_pair
+       private_key=key_pair[:private_key]
+       public_key=key_pair[:public_key]
+       @user.key_public=public_key
+       @user.key_private=aes_encrypt(hash(params[:user][:super_key]),private_key)
        if @user.save
           session[:user_id]=@user.id
+          session[:super_key]=hash(params[:user][:super_key])
           redirect_to "/documents";
        else
           redirect_to "/registration"

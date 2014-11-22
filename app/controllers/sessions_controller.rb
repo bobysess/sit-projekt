@@ -12,10 +12,14 @@ class SessionsController<ApplicationController
    def  create
      @user =User.new
      password_hash=hash(params[:user][:password])
-     @user=User.find_by_email(aes_encrypt(password_hash, params[:user][:email]))
+     @user=User.find_by_email(params[:user][:email])
+
+
      if  @user
-       if(@user.password==password_hash)
+       #if((@user.password==password_hash) && (@user.test_pass_encrypt=aes_encrypt(hash(params[:user][:super_key]),@user.test_pass_plain)))
+       if((@user.password==password_hash))
           session[:user_id]=@user.id
+          #session[:super_key]=hash(params[:user][:super_key])
           redirect_to "/documents"
        else
          redirect_to "/login"
@@ -28,6 +32,7 @@ class SessionsController<ApplicationController
 
    def destroy
      session[:user_id]=nil
+     session[:super_key]=nil
      redirect_to "/login"
 
    end

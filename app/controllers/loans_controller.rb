@@ -24,6 +24,13 @@ class LoansController < ApplicationController
       @loan.user=@user
       @loan.friend=User.find(params[:loan][:friend_id])
       @loan.key=Key.find(params[:loan][:key_id])
+      public_key=@loan.friend.key_public
+      key=rsa_decrypt(get_private_key,@loan.key.value)
+      @loan.key_value=rsa_encrypt(public_key,key)
+      if @loan.key.remark
+         remark=rsa_decrypt(get_private_key,@loan.key.remark)
+         @loan.remark=rsa_encrypt(public_key,remark)
+      end
       @loan.save
     else
 

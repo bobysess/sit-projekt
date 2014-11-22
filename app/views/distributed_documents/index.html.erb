@@ -1,0 +1,73 @@
+<!--- liste loans von user emprunter key --->
+<h3>Document to friends</h3>
+
+<table id="docus_from_user"  class="table table-bordered ">
+  <tr>
+    <th> Friends</th>
+    <th> Documents</th>
+    <th> Delete</th>
+  </tr>
+  <%= "Sie besitzen keinen Dokuments ausgeliehen" if @docus_from_user.empty?  %>
+
+  <%  @docus_from_user.each do |docu|%>
+      <tr>
+        <td><%= "#{docu.friend.name} (#{docu.friend.email })"%></td>
+        <% key= rsa_decrypt(get_private_key,docu.document.key.value)%>
+        <td><%= "#{aes_decrypt(key,docu.document.name )}"%></td>
+        <td><%= link_to "delete" ,distributed_document_path(docu),:method => :delete %></td>
+      </tr>
+  <% end %>
+</table>
+
+<h3>Documents from friends</h3>
+<!--   zu  user  ausgeliehene  schlüssels -->
+<table id="docus_to_user" class="table table-bordered ">
+  <tr>
+    <th> Friends</th>
+    <th> Documents</th>
+    <th> Downloads</th>
+  </tr>
+  <%= "Es wurde Ihnen  keinen Dokument ausgeliehen" if @docus_to_user.empty?  %>
+  <%  @docus_to_user.each do |docu|%>
+      <tr>
+        <% key= rsa_decrypt(get_private_key,docu.key)%>
+        <td><%="#{docu.user.name} (#{docu.user.email})"%></td>
+        <td><%="#{aes_decrypt(key,docu.document.name)}"%></td>
+        <td><%=link_to "Download", distributed_document_path(docu)%></td>
+
+      </tr>
+  <% end %>
+</table>
+<!--  button to add -->
+<!--button id="new_key">New Key</button> -->
+<%= form_for @document, :html=>{:class=>"form-horizontal",:role=>"form"} do |form|%>
+    <fieldset>
+      <legend>New Loan</legend>
+      <table>
+        <tr>
+          <td>Friend</td>
+          <td>
+            <%= form.select :friend_id, options_for_select(@friends.collect{|friend|  ["#{friend.name } (#{friend.email }) ",friend.id ]} )%>
+          </td>
+        </tr>
+        <tr>
+          <td>Key</td>
+          <td>
+            <%= form.select :document_id, options_for_select(@docus.collect{|docu|  ["#{aes_decrypt(rsa_decrypt(get_private_key,docu.key.value),docu.name )}", docu.id] } ) %>
+          </td>
+        </tr>
+        <tr>
+          <td><%= form.submit "new loan" ,:class=>"btn btn-primary"%></td>
+        </tr>
+      </table>
+    </fieldset>
+<% end %>
+
+<style>
+    form input, form select {
+        margin-bottom:10px
+    }
+    input{
+        border-radius: 5px;
+    }
+</style>
