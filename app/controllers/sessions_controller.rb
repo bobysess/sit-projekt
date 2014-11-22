@@ -11,13 +11,14 @@ class SessionsController<ApplicationController
    end
    def  create
      @user =User.new
-     password_hash=hash(params[:user][:password])
+     #password_hash=hash(params[:user][:password])
      @user=User.find_by_email(params[:user][:email])
 
 
      if  @user
        #if((@user.password==password_hash) && (@user.test_pass_encrypt=aes_encrypt(hash(params[:user][:super_key]),@user.test_pass_plain)))
-       if((@user.password==password_hash))
+       #if((@user.password==password_hash))
+       if @user.password == params[:user][:password]
           session[:user_id]=@user.id
           #session[:super_key]=hash(params[:user][:super_key])
           redirect_to "/documents"

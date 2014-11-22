@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141121235747) do
+ActiveRecord::Schema.define(version: 20141122075614) do
 
   create_table "distributed_documents", force: true do |t|
     t.integer "user_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20141121235747) do
     t.text    "key_public"
     t.text    "key_private"
     t.text    "super_key"
+    t.string  "password_hash"
   end
 
   add_index "users", ["user_id"], name: "index_users_on_user_id"

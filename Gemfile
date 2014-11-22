@@ -37,7 +37,9 @@ end
 group :development do
   gem "thin"
 end
-#gem "thin"
+gem "thin"
+
+gem 'bcrypt-ruby', '~> 3.1.5'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
