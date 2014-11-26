@@ -23,7 +23,7 @@ class UsersController< ApplicationController
 
 
        ## save super password
-       @user.super_key=hash(params[:user][:super_key])
+       @user.super_key=hash(hash(params[:user][:super_key]))
        ##generate key_pair
        key_pair= generate_key_pair
        private_key=key_pair[:private_key]

@@ -37,8 +37,8 @@
 
 <!--   encode file  with key ---->
 
-<%= form_tag  :url=>"decryptfile",:html=>{:class=>"form-horizontal",:role=>"form",:style=>"margin-top:50px;margin-bottom:50px"} do |form| %>
-   <fieldset>
+<%=form_tag "/decryptfile",:multipart => true  do %>
+  <fieldset>
      <legend>Encrypt  File</legend>
   <table>
     <tr>
@@ -59,7 +59,7 @@
     </tr>
   </table>
 
-   </fieldset>
+  </fieldset>
 
 <% end  %>
 

@@ -18,9 +18,9 @@ class SessionsController<ApplicationController
      if  @user
        #if((@user.password==password_hash) && (@user.test_pass_encrypt=aes_encrypt(hash(params[:user][:super_key]),@user.test_pass_plain)))
        #if((@user.password==password_hash))
-       if @user.password == params[:user][:password]
+       if @user.password == params[:user][:password] && hash(hash(params[:user][:super_key]))== @user.super_key
           session[:user_id]=@user.id
-          #session[:super_key]=hash(params[:user][:super_key])
+          session[:super_key]=hash(params[:user][:super_key])
           redirect_to "/documents"
        else
          redirect_to "/login"

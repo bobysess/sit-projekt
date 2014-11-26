@@ -28,7 +28,11 @@ class DocumentsController <  ApplicationController
       #delete if exist
 =end
       docu_owner=@user.name
-      docu_last_index= Document.maximum(:id).next
+      if Document.maximum(:id)
+          docu_last_index= Document.maximum(:id)+1
+      else
+          docu_last_index=0
+      end
       path="public/data/#{ aes_encrypt(key,"#{docu_last_index}")}"
       @document.user=@user
       @document.name=aes_encrypt(key,docu_name);
@@ -83,8 +87,8 @@ class DocumentsController <  ApplicationController
      #File.open("public/#{file_name}", "wb"){|f| f.write(file_data)}
      #file_data=aes_pain_decrypt(key,File.read("public/#{file_name}"))
      #File.delete("public/#{file_name}");
-
-    send_data file_data, :filename=> file_name, :disposition=> 'inline'
+     #render :text => key
+     send_data file_data, :filename=> file_name#, :disposition=> 'inline'
 
 
     end

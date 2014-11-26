@@ -47,7 +47,7 @@ module ApplicationHelper
   end
 
   def  get_super_key
-    current_user.super_key
+     session[:super_key]
   end
 
   def  get_iv
