@@ -10,7 +10,7 @@
   </tr>
   <%  @documents.each do |docu|%>
       <% key= rsa_decrypt(get_private_key,docu.key.value)  %>
-      <% remark=rsa_decrypt(get_private_key,docu.key.remark)%>
+      <% remark=rsa_decrypt(get_private_key,docu.key.remark) if docu.key.remark %>
       <tr>
         <td  title="<%="#{key} (#{remark})"  %>">
            <%= "#{aes_decrypt(key,docu.name)} "%><%="(#{aes_decrypt(key,docu.remark)})" if docu.remark %>
@@ -22,12 +22,12 @@
 <% end %>
 </table>
 <!-- new  Files   upload  -->
-<%= form_for @document , :html=>{:class=>"form-horizontal"} do |form| %>
+<%= form_for @document , :html=>{:class=>"form-horizontal",:onsubmit=>"return checkFormForNewFile(this)"} do |form| %>
    <fieldset>
     <legend>New  File</legend>
      <table>
      <tr><td>Remark</td>  <td> <%= form.text_field :remark  %></td> </tr>
-     <tr> <td>Key</td><td>  <%= form.select :key_id, options_for_select(@user.keys.collect{|key|  ["#{rsa_decrypt(get_private_key,key.value )} (#{rsa_decrypt(get_private_key,key.remark)}) ", key.id] } ) %></td></tr>
+     <tr> <td>Key</td><td>  <%= form.select :key_id, options_for_select(@user.keys.collect{|key|  ["#{rsa_decrypt(get_private_key,key.value )} (#{rsa_decrypt(get_private_key,key.remark) if key.remark }) ", key.id] } ) %></td></tr>
      <tr><td>File</td><td> <%=form.file_field :upload%></td></tr>
      <tr><td> <%= form.submit "New File",:class=>"btn btn-primary"%></td></tr>
     </table>
@@ -37,14 +37,14 @@
 
 <!--   encode file  with key ---->
 
-<%=form_tag "/decryptfile",:multipart => true  do %>
+<%=form_tag "/decryptfile",:multipart => true ,:onsubmit=>"return checkFormForEncryptFile(this)" do %>
   <fieldset>
      <legend>Encrypt  File</legend>
   <table>
     <tr>
     <td>Key</td>
     <td>
-     <%= select_tag :loan_id, options_for_select(@loans.collect{|loan|  ["#{rsa_decrypt(get_private_key,loan.key_value )} (#{loan.user.name}-#{rsa_decrypt(get_private_key,loan.remark)}) ", loan.id] } ) %>
+     <%= select_tag :loan_id, options_for_select(@loans.collect{|loan|  ["#{rsa_decrypt(get_private_key,loan.key_value )} (#{loan.user.name}-#{rsa_decrypt(get_private_key,loan.remark) if loan.remark}) ", loan.id] } ) %>
     </td>
     </tr>
     <tr>
@@ -76,4 +76,39 @@
     $(function() {
         $( document ).tooltip();
     });
+
+</script>
+
+<script>
+    function checkFormForNewFile(form){
+        //return false;
+        //alert(form.document_upload.value =="");
+
+        if( form.document_key_id.value=="" ) {
+            alert("You dont't have any  key!");
+            return false;
+        }
+
+        if(form.document_upload.value==""){
+            alert("Please choose a File");
+            return false;
+
+        }
+
+    }
+
+     function   checkFormForEncryptFile(form){
+         if (form.loan_id.value==""){
+             alert("You don't have  any Key!");
+             return false;
+         }
+
+         if(form.upload.value==""){
+             alert("Please choose any shared File");
+             return false;
+
+         }
+
+
+     }
 </script>

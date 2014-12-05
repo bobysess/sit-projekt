@@ -40,9 +40,9 @@
 </table>
 <!--  button to add -->
 <!--button id="new_key">New Key</button> -->
-<%= form_for @document, :html=>{:class=>"form-horizontal",:role=>"form"} do |form|%>
+<%= form_for @document, :html=>{:class=>"form-horizontal",:onsubmit=>"return checkForm(this)" ,:role=>"form"} do |form|%>
     <fieldset>
-      <legend>New Loan</legend>
+      <legend>New distributed Document</legend>
       <table>
         <tr>
           <td>Friend</td>
@@ -51,7 +51,7 @@
           </td>
         </tr>
         <tr>
-          <td>Key</td>
+          <td>Document</td>
           <td>
             <%= form.select :document_id, options_for_select(@docus.collect{|docu|  ["#{aes_decrypt(rsa_decrypt(get_private_key,docu.key.value),docu.name )}", docu.id] } ) %>
           </td>
@@ -71,3 +71,17 @@
         border-radius: 5px;
     }
 </style>
+
+<script>
+  function checkForm(form){
+
+    if( form.distributed_document_friend_id.value=="" ) {
+        alert("You dont't have any Friend!");
+        return false;
+    }
+    if (form.distributed_document_document_id.value==""){
+        alert("You don't have  any document!");
+        return false;
+    }
+  }
+</script>

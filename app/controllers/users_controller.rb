@@ -1,5 +1,6 @@
 class UsersController< ApplicationController
   skip_before_action :require_login
+  before_action :check_input, :only => :create
 
   def new
     if current_user.nil?
@@ -38,8 +39,27 @@ class UsersController< ApplicationController
           redirect_to "/registration"
        end
      else
+       flash[:notice] = "Confirm password  or confirm superkey is uncorrect!"
        redirect_to "/registration"
      end
+  end
+
+
+  def check_input
+     if  params[:user][:name]==""
+        flash[:error]= "Please enter a Username"
+        redirect_to "/registration"
+     elsif params[:user][:email]==""
+       flash[:error]= "Please enter a Email"
+       redirect_to "/registration"
+     elsif params[:user][:password]==""
+       flash[:error]= "Please enter a Password"
+       redirect_to "/registration"
+     elsif params[:user][:super_key]==""
+       flash[:error]= "Please enter a Superkey"
+       redirect_to "/registration"
+     end
+
   end
 
 

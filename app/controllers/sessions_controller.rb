@@ -23,9 +23,11 @@ class SessionsController<ApplicationController
           session[:super_key]=hash(params[:user][:super_key])
           redirect_to "/documents"
        else
+         flash[:error] = "Password or Superkey is uncorrect!"
          redirect_to "/login"
        end
      else
+         flash[:error] = "This User is don't Exist!"
          redirect_to "/login"
      end
 

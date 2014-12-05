@@ -33,12 +33,15 @@ class DocumentsController <  ApplicationController
       else
           docu_last_index=0
       end
-      path="public/data/#{ aes_encrypt(key,"#{docu_last_index}")}"
+      path="public/data/#{ (aes_encrypt(key,"#{docu_last_index}")).tr('/','')}"
       @document.user=@user
       @document.name=aes_encrypt(key,docu_name);
       @document.path=aes_encrypt(key,path)
       @document.remark=aes_encrypt(key,params[:document][:remark])  if params[:document][:remark] && params[:document][:remark]!=""
       if  @document.save
+        if File.exist?(path)
+          File.delete(path)
+        end
           File.open(path, "wb") { |f| f.write(aes_pain_encrypt(key,params[:document][:upload].read)) }####################
       end
       #render :json=> @document

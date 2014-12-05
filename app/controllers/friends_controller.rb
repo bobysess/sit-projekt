@@ -22,7 +22,11 @@ class FriendsController < ApplicationController
      @user=current_user
      @friend= (User.all.select{|u| u.name== params[:friend_name]}).first if params[:friend_name] && params[:friend_name]!=""
      @friend= User.find(params[:friend_id]) if params[:friend_id]
-    @friendship=Friendship.new
+     #check if the  user exists
+     unless @friend && params[:friend_name] && params[:friend_name]==""
+         flash[:error] = "This User is don't Exist!"
+     end
+     @friendship=Friendship.new
     if !@user.friends.include?(@friend) && @friend
        @friendship.user=@user
        @friendship.friend=@friend

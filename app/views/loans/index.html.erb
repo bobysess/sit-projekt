@@ -12,7 +12,7 @@
   <%  @loans_from_user.each do |loan|%>
       <tr>
         <td><%= "#{loan.friend.name} (#{loan.friend.email })"%></td>
-        <td><%= "#{rsa_decrypt(get_private_key,loan.key.value )} (#{rsa_decrypt(get_private_key,loan.key.remark ) if loan.key.remark})"%></td>
+        <td><%= "#{rsa_decrypt(get_private_key,loan.key.value )} (#{rsa_decrypt(get_private_key,loan.key.remark) if loan.key.remark})"%></td>
         <td><%= link_to "delete" ,loan_path(loan),:method => :delete %></td>
       </tr>
   <% end %>
@@ -36,7 +36,7 @@
 </table>
 <!--  button to add -->
 <!--button id="new_key">New Key</button> -->
-<%= form_for @loan , :html=>{:class=>"form-horizontal",:role=>"form"} do |form|%>
+<%= form_for @loan , :html=>{:class=>"form-horizontal",:role=>"form",:onsubmit=>"return checkForm(this)"} do |form|%>
   <fieldset>
     <legend>New Loan</legend>
     <table>
@@ -49,7 +49,7 @@
       <tr>
         <td>Key</td>
         <td>
-         <%= form.select :key_id, options_for_select(@keys.collect{|key|  ["#{rsa_decrypt(get_private_key,key.value )} #{rsa_decrypt(get_private_key,key.remark)} ", key.id] } ) %>
+         <%= form.select :key_id, options_for_select(@keys.collect{|key|  ["#{rsa_decrypt(get_private_key,key.value )} #{rsa_decrypt(get_private_key,key.remark) if key.remark } ", key.id] } ) %>
         </td>
       </tr>
       <tr>
@@ -67,3 +67,17 @@
         border-radius: 5px;
     }
 </style>
+
+<script>
+function checkForm(form){
+
+if( form.loan_friend_id.value=="" ) {
+alert("You dont't have any Friend!");
+return false;
+}
+if (form.loan_key_id.value==""){
+alert("You don't have  any Key!");
+return false;
+}
+}
+</script>

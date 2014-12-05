@@ -4,11 +4,13 @@ class  User <  ActiveRecord::Base
 
 
   #has_many :friends ,:through => :friendships
-      has_many :keys
-      has_many :documents
+      has_many :keys ,dependent: :destroy
+      has_many :documents,dependent: :destroy
      # belongs_to :users
-      has_many :loans
-      has_many :key_pairs
+      has_many :loans ,dependent: :destroy
+      has_many :key_pairs ,dependent: :destroy
+      has_many :Friendships ,dependent: :destroy
+      has_many :distributed_documents, dependent: :destroy
 
       #has_and_belongs_to_many :users
       #has_and_belongs_to_many :friends, class_name:  "User"
@@ -26,7 +28,7 @@ class  User <  ActiveRecord::Base
 
 
       def  friends
-          friendships=Friendship.all.select{|fr|  fr.user.id==self.id}
+          friendships=Friendship.all.select{|fr|  (fr.user.id==self.id)}
           friends=friendships.collect{|fr| fr.friend}
           friends
       end

@@ -21,6 +21,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<!----  for faults --->
+<% flash.each do |name, msg| -%>
+    <%= content_tag :div, msg, class: name %>
+<% end -%>
 <!------- header ------->
 <nav  class="navbar navbar-default navbar-inverse" role="navigation" id="navi">
 <div  class="container">
@@ -33,7 +37,7 @@
         <li><%=link_to "Key Pairs",key_pairs_path  %></li>
         <li><%= link_to "Documents",documents_path%></li>
         <li><%= link_to "Friends",friends_path%></li>
-        <li><%= link_to "Loans",loans_path%></li>
+        <li><%= link_to "Shared Keys",loans_path%></li>
         <li><%=link_to "Shared Documents", distributed_documents_path  %></li>
      </ul >
    <% if current_user %>
@@ -84,3 +88,4 @@
 
 
 </style>
+
